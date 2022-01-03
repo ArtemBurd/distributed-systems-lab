@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: courier-service
+spec:
+  selector:
+    app: courier-service
+  type: NodePort
+  ports:
+    - name: http
+      port: 8082
+      nodePort: 31002
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: courier-service
+spec:
+  selector:
+    matchLabels:
+      app: courier-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: courier-service
+    spec:
+      containers:
+        - name: server
+          image: artemburd073/courier-service
+          ports:
+            - name: http
+              containerPort: 8082
+
+---
